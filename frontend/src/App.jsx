@@ -4,7 +4,9 @@ import MainLayout from "./layout/MainLayout";
 function App() {
   return (
     <MainLayout>
-      <Dashboard />
+      {(setIsOpen) => (
+  <Dashboard setIsOpen={setIsOpen} />
+)}
     </MainLayout>
   );
 }

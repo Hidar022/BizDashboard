@@ -2,12 +2,13 @@ import Navbar from "../components/Navbar";
 import OverviewCard from "../components/OverviewCard";
 import RevenueChart from "../components/RevenueChart";
 import CategoryChart from "../components/CategoryChart";
+import TransactionsTable from "../components/TransactionsTable";
 
-const Dashboard = () => {
+const Dashboard = ({ setIsOpen }) => {
   return (
     <div className="flex-1 p-6 bg-[#f5f7fb] min-h-screen">
 
-      <Navbar />
+      <Navbar setIsOpen={setIsOpen} />
 
       <div className="mt-6">
         <h2 className="text-2xl font-bold text-gray-800">
@@ -17,7 +18,7 @@ const Dashboard = () => {
 
       {/* Cards Section */}
 
-      <div className="grid grid-cols-4 gap-6 mt-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
 
         <OverviewCard
           title="Total Revenue"
@@ -45,7 +46,7 @@ const Dashboard = () => {
 
       </div>
 
-          <div className="grid grid-cols-3 gap-6 mt-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
 
         <div className="col-span-2">
           <RevenueChart />
@@ -56,6 +57,8 @@ const Dashboard = () => {
         </div>
 
       </div>
+
+      <TransactionsTable />
 
     </div>
   );
