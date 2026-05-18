@@ -8,6 +8,9 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Transaction
 from .serializers import TransactionSerializer
 
+from rest_framework.views import APIView
+
+
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -36,3 +39,23 @@ class TransactionListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         # Automatically attach the logged-in user to the new transaction
         serializer.save(user=self.request.user)
+
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Returns current logged-in user data
+        return Response({
+            "username": request.user.username,
+            "email": request.user.email,
+            "first_name": request.user.first_name
+        })
+
+    def patch(self, request):
+        # Updates user information in the DB
+        user = request.user
+        user.first_name = request.data.get('first_name', user.first_name)
+        user.email = request.data.get('email', user.email)
+        user.save()
+        return Response({"status": "profile updated"})

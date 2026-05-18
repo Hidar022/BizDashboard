@@ -20,14 +20,13 @@ from api.views import RegisterView # Import your view
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
+# backend/urls.py
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
-    # Check this line carefully! 
-    # If you use 'api/register/', your React axios must match it exactly.
     path('api/register/', RegisterView.as_view(), name='auth_register'),
-    
     path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     
+    # Add this line so your transaction URLs are registered
+    path('api/', include('api.urls')), 
 ]

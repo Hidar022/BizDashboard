@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import axios from 'axios';
+import api from '../api'; // Import the central api config
 
 const Register = () => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
@@ -21,8 +21,8 @@ const Register = () => {
 
     setLoading(true);
     try {
-      // Using email as username since Django's User model requires a username
-      await axios.post('http://127.0.0.1:8000/api/register/', {
+      // Use your 'api' instance instead of raw axios
+      await api.post('/api/register/', {
         username: formData.email, 
         email: formData.email,
         password: formData.password
@@ -31,6 +31,7 @@ const Register = () => {
       alert("Account created! Please login.");
       navigate('/login');
     } catch (err) {
+      // Handle the error response from Django
       const msg = err.response?.data?.username?.[0] || "Registration failed. Email might be taken.";
       setError(msg);
     } finally {
@@ -43,7 +44,7 @@ const Register = () => {
       <div className="max-w-md w-full bg-[#14213d] rounded-2xl shadow-xl p-8 border border-gray-700">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Create Account</h1>
-          <p className="text-gray-400">Join PulseBoard today</p>
+          <p className="text-gray-400">Join BizDashboard today</p>
         </div>
 
         {error && <div className="bg-red-500/10 border border-red-500 text-red-500 p-3 rounded-xl mb-4 text-sm text-center">{error}</div>}
@@ -106,7 +107,7 @@ const Register = () => {
         </form>
 
         <p className="text-center text-gray-400 mt-6">
-          Already have an account? <Link to="/login" className="text-purple-400 font-semibold">Login</Link>
+          Already have an account? <Link to="/login" className="text-purple-400 font-semibold ml-1">Login</Link>
         </p>
       </div>
     </div>

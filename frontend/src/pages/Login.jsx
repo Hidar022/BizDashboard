@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api'; // Centralized Axios instance
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -15,17 +15,16 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/login/', {
-        username: email, // Django SimpleJWT uses 'username' field
+      const response = await api.post('/api/login/', {
+        username: email, // Django SimpleJWT logic
         password: password
       });
 
-      // Save the JWT tokens to LocalStorage
-      localStorage.setItem('access_token', response.data.access);
-      localStorage.setItem('refresh_token', response.data.refresh);
+      // Saving to localStorage so api.js can find them later
+      localStorage.setItem('access', response.data.access);
+      localStorage.setItem('refresh', response.data.refresh);
 
-      // Successfully logged in, move to Dashboard
-      navigate('/');
+      navigate('/'); // Go to Dashboard
     } catch (err) {
       setError("Invalid email or password. Please try again.");
     } finally {
@@ -37,7 +36,7 @@ const Login = () => {
     <div className="min-h-screen bg-[#0f172a] flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-[#14213d] rounded-2xl shadow-xl p-8 border border-gray-700">
         <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold text-white mb-2">PulseBoard</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">BizDashboard</h1>
           <p className="text-gray-400">Welcome back! Please sign in.</p>
         </div>
 
