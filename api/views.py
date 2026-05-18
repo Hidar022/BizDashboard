@@ -10,6 +10,8 @@ from .serializers import TransactionSerializer
 
 from rest_framework.views import APIView
 
+from rest_framework.generics import DestroyAPIView
+
 
 
 class RegisterView(generics.CreateAPIView):
@@ -39,6 +41,15 @@ class TransactionListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         # Automatically attach the logged-in user to the new transaction
         serializer.save(user=self.request.user)
+
+class TransactionDestroyView(DestroyAPIView):
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Enforces security so users can only delete their own transactions!
+        return Transaction.objects.filter(user=self.request.user)
 
 
 class UserProfileView(APIView):
