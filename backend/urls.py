@@ -16,17 +16,28 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from api.views import RegisterView # Import your view
+from django.http import JsonResponse
+from api.views import RegisterView 
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+# Simple inline function to handle the base root URL
+def api_root_status(request):
+    return JsonResponse({
+        "status": "online",
+        "service": "Business Dashboard API",
+        "version": "1.0.0"
+    })
 
-# backend/urls.py
 urlpatterns = [
+    # Base URL health check
+    path('', api_root_status, name='api_root_status'),
+    
+    # Auth Endpoints
     path('admin/', admin.site.urls),
     path('api/register/', RegisterView.as_view(), name='auth_register'),
     path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     
-    # Add this line so your transaction URLs are registered
+    # App Features Appended
     path('api/', include('api.urls')), 
 ]
