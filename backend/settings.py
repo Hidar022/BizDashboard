@@ -41,9 +41,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1nnqm)oww#=vr#+77*qs47y2(gihvf&1-vz^arro4_@h%rhty6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') != 'False'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'biz-dashboard-pearl.vercel.app', 
+    '.vercel.app', 
+    'localhost', 
+    '127.0.0.1'
+]
+
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Application definition
