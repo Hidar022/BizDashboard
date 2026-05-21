@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useState } from 'react';
+import Landing from './pages/Landing'; // 1. Import your new premium landing component
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -8,7 +9,7 @@ import Transactions from './pages/Transactions';
 import Categories from './pages/Categories';
 import Reports from './pages/Reports'; 
 import Settings from './pages/Settings'; 
-import { FaBars, FaTimes } from 'react-icons/fa'; 
+import { FaBars } from 'react-icons/fa'; 
 
 // The "Bouncer" Logic
 const ProtectedRoute = ({ children }) => {
@@ -21,9 +22,8 @@ const ProtectedRoute = ({ children }) => {
 const DashboardLayout = ({ children, isOpen, setIsOpen }) => (
   <div className="flex h-screen w-screen overflow-hidden bg-[#f5f7fb] relative">
     
-    {/* 1. MOBILE TOP BAR (Only visible on screens smaller than lg) */}
+    {/* MOBILE TOP BAR (Only visible on screens smaller than lg) */}
     <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-[#14213d] text-white flex items-center px-4 z-50 shadow-md gap-3">
-      {/* Moved hamburger button to the LEFT side of the text */}
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className="text-xl p-2 focus:outline-none text-gray-200 hover:text-white transition-colors cursor-pointer"
@@ -36,10 +36,9 @@ const DashboardLayout = ({ children, isOpen, setIsOpen }) => (
       </h1>
     </div>
 
-    {/* Sidebar state controls */}
     <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
     
-    {/* 2. MOBILE OVERLAY: Dims the backdrop, clicking it closes the sidebar menu instantly */}
+    {/* MOBILE OVERLAY */}
     {isOpen && (
       <div 
         onClick={() => setIsOpen(false)}
@@ -47,7 +46,6 @@ const DashboardLayout = ({ children, isOpen, setIsOpen }) => (
       />
     )}
     
-    {/* pt-16 ensures page contents do not slide under the mobile header */}
     <main className="flex-1 overflow-x-hidden overflow-y-auto pt-16 lg:pt-0">
       {children}
     </main>
@@ -61,11 +59,14 @@ function App() {
     <Router>
       <Routes>
         {/* Public Routes */}
+        {/* 2. Base path now delivers the obsidian premium introduction scene */}
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
         {/* All Protected Dashboard Routes */}
-        <Route path="/" element={
+        {/* 3. Shifted primary dashboard node to /dashboard */}
+        <Route path="/dashboard" element={
           <ProtectedRoute>
             <DashboardLayout isOpen={isOpen} setIsOpen={setIsOpen}>
               <Dashboard setIsOpen={setIsOpen} />
@@ -105,7 +106,7 @@ function App() {
           </ProtectedRoute>
         } />
 
-        {/* Redirect unknown paths */}
+        {/* 4. Catch-all routing now naturally defaults safely back to Landing */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
