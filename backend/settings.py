@@ -12,6 +12,22 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 
+import os
+import dj_database_url
+from dotenv import load_dotenv
+
+# Load local .env file if it exists
+load_dotenv()
+
+# Replace hardcoded secret key with environment fallback
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-1nnqm)oww#=vr#+77*qs47y2(gihvf&1-vz^arro4_@h%rhty6')
+
+# Turn off debug mode in production safely
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
+
+# Allow Vercel domain routing
+ALLOWED_HOSTS = ['.vercel.app', 'localhost', '127.0.0.1']
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -79,6 +95,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+# Database configuration
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -86,7 +103,13 @@ DATABASES = {
     }
 }
 
-
+# If Vercel or Neon provides a DATABASE_URL, inject it
+if os.environ.get('DATABASE_URL'):
+    DATABASES['default'] = dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=0,  # Neon recommends 0 to close connections on serverless requests
+        ssl_require=True
+    )
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
