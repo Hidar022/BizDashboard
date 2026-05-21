@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000", // Your Django URL
+  // SWAP THIS: Change from local 127.0.0.1 to your live production API URL
+  baseURL: "https://biz-dashboard-pearl.vercel.app", 
 });
 
 // This "Interceptor" runs before every request to the backend

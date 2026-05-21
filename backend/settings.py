@@ -19,30 +19,16 @@ from dotenv import load_dotenv
 # Load local .env file if it exists
 load_dotenv()
 
-# Replace hardcoded secret key with environment fallback
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-1nnqm)oww#=vr#+77*qs47y2(gihvf&1-vz^arro4_@h%rhty6')
-
-# Turn off debug mode in production safely
-DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
-
-# Allow Vercel domain routing
-ALLOWED_HOSTS = ['.vercel.app', 'localhost', '127.0.0.1']
-
-CORS_ALLOW_ALL_ORIGINS = True
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# ONLY ONE SECRET KEY ENTRY (reads from environment variables on Vercel)
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-1nnqm)oww#=vr#+77*qs47y2(gihvf&1-vz^arro4_@h%rhty6')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1nnqm)oww#=vr#+77*qs47y2(gihvf&1-vz^arro4_@h%rhty6'
-
-# SECURITY WARNING: don't run with debug turned on in production!
+# ONLY ONE DEBUG ENTRY
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') != 'False'
 
+# ONLY ONE ALLOWED_HOSTS ENTRY
 ALLOWED_HOSTS = [
     'biz-dashboard-pearl.vercel.app', 
     '.vercel.app', 
@@ -50,9 +36,11 @@ ALLOWED_HOSTS = [
     '127.0.0.1'
 ]
 
+# CORS setup is completely correct
+CORS_ALLOW_ALL_ORIGINS = True
+
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
 
 # Application definition
 
